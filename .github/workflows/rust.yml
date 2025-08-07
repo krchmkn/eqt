@@ -1,4 +1,4 @@
-name: Rust
+name: Rust CI
 
 on:
   push:
@@ -11,12 +11,23 @@ env:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v4
+    
     - name: Run tests
       run: cargo test --verbose
-    - name: Build
+      
+    - name: Build release
       run: cargo build --release
+      
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: release-${{ matrix.os }}
+        path: target/release/
