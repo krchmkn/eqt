@@ -1,4 +1,4 @@
-use std::env;
+use env;
 
 #[derive(Debug)]
 enum Input<'a> {
@@ -55,20 +55,43 @@ impl Compare for Input<'_> {
     }
 }
 
-static MESSAGE: &str = "Two arguments required.";
+fn gen_help_msg() -> String {
+    let name = env!("CARGO_PKG_NAME");
+    let version = env!("CARGO_PKG_VERSION");
+
+    format!(
+        "
+{} {} - Compare numbers or text values
+
+Usage: 
+    {}  <VALUE1> <VALUE2>
+
+Arguments:
+    <VALUE1>    First value to compare (number or text)
+    <VALUE2>    Second value to compare (number or text)
+
+Comparison Rules:
+    - Numbers are compared mathematically (>, <, ==)
+    - Text is compared lexicographically (==, !=)
+    - Mixed types are converted to strings and compared
+
+Examples: 
+    {} 10 20
+    {} 'hello' 'world'
+    {} 5 '5'
+    ",
+        name, version, name, name, name, name
+    )
+}
 
 fn main() {
-    let mut args = env::args().skip(1);
-
-    if args.len() < 2 {
-        eprintln!("{}", MESSAGE);
-        return;
+    let args: Vec<String> = std::env::args().skip(1).collect();
+    match args.as_slice() {
+        [val1, val2] => {
+            println!("{}", Input::compare(Input::get(val1), Input::get(val2)));
+        }
+        _ => println!("{}", gen_help_msg()),
     }
-
-    let arg1 = args.next().unwrap_or_else(|| panic!("{}", MESSAGE));
-    let arg2 = args.next().unwrap_or_else(|| panic!("{}", MESSAGE));
-
-    println!("{:?}", Input::compare(Input::get(&arg1), Input::get(&arg2)));
 }
 
 #[cfg(test)]
