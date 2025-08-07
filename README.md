@@ -1,4 +1,4 @@
-# eqt 0.1.0 
+# eqt 0.1.0 [![build](https://github.com/krchmkn/eqt/actions/workflows/rust.yml/badge.svg)](https://github.com/krchmkn/eqt/actions/workflows/rust.yml)
 
 Compare numbers or text values
 
