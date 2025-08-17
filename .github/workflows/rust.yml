@@ -25,6 +25,9 @@ jobs:
       
     - name: Build release
       run: cargo build --release
+
+    - name: Build release
+      run: cargo run -r 100 100
       
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
